@@ -77,7 +77,7 @@ async function main() {
     entryPoints: ['src/extension.ts'],
     bundle: true,
     outfile: 'dist/extension.js',
-    external: ['vscode', '@patricio0312rev/skillset'],
+    external: ['vscode'],
     format: 'cjs',
     platform: 'node',
     sourcemap: !production,
