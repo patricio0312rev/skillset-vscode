@@ -1,0 +1,315 @@
+{
+  "name": "skillset-vscode",
+  "displayName": "Skillset - AI Skills Generator and Manager",
+  "description": "Import production-ready AI skills for Claude Code, Cursor, GitHub Copilot, and other coding assistants",
+  "version": "0.1.0",
+  "publisher": "patricio0312rev",
+  "icon": "resources/icon.png",
+  "author": {
+    "name": "Patricio Marroquin",
+    "url": "https://github.com/patricio0312rev"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patricio0312rev/skillset-vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/patricio0312rev/skillset-vscode/issues"
+  },
+  "homepage": "https://github.com/patricio0312rev/skillset-vscode#readme",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Snippets",
+    "Programming Languages"
+  ],
+  "keywords": [
+    "skillset",
+    "ai",
+    "assistant",
+    "claude",
+    "cursor",
+    "copilot",
+    "skills",
+    "prompt",
+    "development"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "skillset.openPanel",
+        "title": "Open SkillSet Manager",
+        "category": "SkillSet",
+        "icon": "$(book)"
+      },
+      {
+        "command": "skillset.quickInit",
+        "title": "Quick Setup",
+        "category": "SkillSet",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "skillset.initSkills",
+        "title": "Initialize Skills",
+        "category": "SkillSet",
+        "icon": "$(add)"
+      },
+      {
+        "command": "skillset.refreshSkills",
+        "title": "Refresh Skills",
+        "category": "SkillSet",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "skillset.updateSkills",
+        "title": "Update Skills",
+        "category": "SkillSet",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "skillset.removeSkills",
+        "title": "Remove All Skills",
+        "category": "SkillSet",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "skillset.viewSkill",
+        "title": "View Skill",
+        "category": "SkillSet",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "skillset.openSettings",
+        "title": "Open Settings",
+        "category": "SkillSet",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "skillset.previewSkill",
+        "title": "Preview Skill",
+        "category": "SkillSet",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "skillset.addSkill",
+        "title": "Add Skill",
+        "category": "SkillSet",
+        "icon": "$(add)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "skillset-sidebar",
+          "title": "SkillSet",
+          "icon": "$(library)"
+        }
+      ]
+    },
+    "views": {
+      "skillset-sidebar": [
+        {
+          "id": "skillset-installed",
+          "name": "Installed Skills",
+          "icon": "$(library)",
+          "contextualTitle": "SkillSet - Installed"
+        },
+        {
+          "id": "skillset-available",
+          "name": "Available Skills",
+          "icon": "$(library)",
+          "contextualTitle": "SkillSet - Available"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "skillset-installed",
+        "contents": "No skills installed yet.\n[Open Skills Manager](command:skillset.openPanel)\n[Quick Setup](command:skillset.quickInit)"
+      },
+      {
+        "view": "skillset-available",
+        "contents": "Browse and install development skills for your AI assistant.\n[Open Skills Manager](command:skillset.openPanel)\n[Quick Setup](command:skillset.quickInit)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "skillset.openPanel",
+          "when": "view == skillset-installed || view == skillset-available",
+          "group": "navigation@1"
+        },
+        {
+          "command": "skillset.refreshSkills",
+          "when": "view == skillset-installed || view == skillset-available",
+          "group": "navigation@2"
+        },
+        {
+          "command": "skillset.quickInit",
+          "when": "view == skillset-available",
+          "group": "1_actions@1"
+        },
+        {
+          "command": "skillset.initSkills",
+          "when": "view == skillset-available",
+          "group": "1_actions@2"
+        },
+        {
+          "command": "skillset.updateSkills",
+          "when": "view == skillset-installed",
+          "group": "2_update@1"
+        },
+        {
+          "command": "skillset.removeSkills",
+          "when": "view == skillset-installed",
+          "group": "3_remove@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "skillset.viewSkill",
+          "when": "view == skillset-installed && viewItem == skill",
+          "group": "inline"
+        },
+        {
+          "command": "skillset.previewSkill",
+          "when": "view == skillset-available && viewItem == available-skill",
+          "group": "inline@1"
+        },
+        {
+          "command": "skillset.addSkill",
+          "when": "view == skillset-available && viewItem == available-skill",
+          "group": "inline@2"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "skillset.openPanel",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "skillset.quickInit",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "skillset.initSkills",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "skillset.refreshSkills",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "skillset.updateSkills",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "skillset.removeSkills",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "skillset.viewSkill",
+          "when": "false"
+        },
+        {
+          "command": "skillset.previewSkill",
+          "when": "false"
+        },
+        {
+          "command": "skillset.addSkill",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "SkillSet",
+      "properties": {
+        "skillset.defaultTool": {
+          "type": "string",
+          "enum": [
+            "claude-code",
+            "cursor",
+            "copilot",
+            "other"
+          ],
+          "enumDescriptions": [
+            "Claude Code - Uses .claude/skills/ folder with YAML frontmatter",
+            "Cursor - Uses .cursor/rules/ folder for AI rules",
+            "GitHub Copilot - Uses .github/skills/ folder with YAML frontmatter",
+            "Other AI Tools - Uses universal .claude/skills/ format"
+          ],
+          "default": "claude-code",
+          "description": "Default AI tool for skill generation"
+        },
+        "skillset.defaultFolder": {
+          "type": "string",
+          "default": "",
+          "description": "Custom folder name for skills (leave empty for tool defaults)"
+        },
+        "skillset.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically refresh skill lists when files change"
+        },
+        "skillset.showWelcome": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show welcome message on first use"
+        },
+        "skillset.defaultDomains": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "foundation",
+              "frontend",
+              "backend",
+              "ai-engineering",
+              "architecture",
+              "cicd",
+              "database",
+              "testing",
+              "security",
+              "performance"
+            ]
+          },
+          "default": [
+            "foundation",
+            "backend",
+            "frontend"
+          ],
+          "description": "Default domains to pre-select during skill initialization"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.js --production",
+    "compile": "tsc -p ./",
+    "watch": "node esbuild.js --watch",
+    "lint": "eslint src --ext ts",
+    "package": "npm run build && npx @vscode/vsce package",
+    "publish": "npm run build && npx @vscode/vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.27.2",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@patricio0312rev/skillset": "^0.1.3"
+  }
+}
