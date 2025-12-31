@@ -5,6 +5,14 @@ All notable changes to the SkillSet VS Code extension will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2024-12-31
+
+### Fixed
+
+- Fixed skill generation creating placeholder files instead of actual templates in production
+- Reimplemented skill generation to use bundled templates from `dist/templates/` with proper path resolution
+- Skills now correctly copy full template content including references and templates subfolders
+
 ## [0.1.3] - 2024-12-31
 
 ### Fixed
