@@ -1,4 +1,7 @@
+import * as vscode from 'vscode';
 import * as skillset from '@patricio0312rev/skillset';
+import * as fs from 'fs';
+import * as path from 'path';
 import { SkillConfig } from '../models/SkillConfig';
 import { Domain, Skill } from '../models/Domain';
 import { logger } from '../utils/logger';
@@ -11,16 +14,22 @@ export class SkillSetService {
   /**
    * Generate skills based on configuration
    * @param config Skill generation configuration
-   * @param workspaceRoot Workspace root path (for changing directory)
+   * @param workspaceRoot Workspace root path
    * @returns Promise resolving when generation is complete
    */
   async generateSkills(config: SkillConfig, workspaceRoot: string): Promise<void> {
     logger.info('Generating skills', { config, workspaceRoot });
 
     try {
-      // Change to workspace directory for skill generation
-      const originalCwd = process.cwd();
-      process.chdir(workspaceRoot);
+      // Get extension path to find bundled templates
+      const extension = vscode.extensions.getExtension('patricio0312rev.skillset-vscode');
+      if (!extension) {
+        throw new Error('Extension not found');
+      }
+      const extensionPath = extension.extensionPath;
+      const templatesPath = path.join(extensionPath, 'dist', 'templates');
+
+      logger.info('Using templates from', { templatesPath });
 
       // Map extension domain IDs to library domain IDs
       const domainMapping: Record<string, string> = {
@@ -30,29 +39,113 @@ export class SkillSetService {
 
       const mappedDomains = config.domains.map(domain => domainMapping[domain] || domain);
 
-      logger.info('Calling skillset.generate with', {
-        tool: config.tool,
-        folder: config.folder,
-        domains: mappedDomains,
-        skills: config.skills,
-        cwd: process.cwd()
-      });
+      // Create target folder
+      const targetFolder = path.join(workspaceRoot, config.folder);
+      if (!fs.existsSync(targetFolder)) {
+        fs.mkdirSync(targetFolder, { recursive: true });
+      }
 
-      // Call SkillSet library to generate skills
-      const result = await skillset.generate({
-        tool: config.tool,
-        folder: config.folder,
-        domains: mappedDomains,
-        skills: config.skills,
-      });
+      // Determine file extension based on tool
+      const fileExtension = config.tool === 'cursor' ? 'RULE.md' : 'SKILL.md';
 
-      // Restore original directory
-      process.chdir(originalCwd);
+      let skillsGenerated = 0;
 
-      logger.info('Skills generated successfully', result);
+      // Generate skills for each domain
+      for (const domainId of mappedDomains) {
+        const domainTemplatesPath = path.join(templatesPath, domainId);
+        
+        if (!fs.existsSync(domainTemplatesPath)) {
+          logger.warn('Domain templates not found', { domainId, path: domainTemplatesPath });
+          continue;
+        }
+
+        // Get skills to generate (all skills in domain or specific ones)
+        let skillsToGenerate: string[];
+        if (config.skills && config.skills.length > 0) {
+          // Filter to only skills in this domain or matching the skill ID
+          skillsToGenerate = config.skills.filter(skill => {
+            const skillPath = path.join(domainTemplatesPath, skill);
+            return fs.existsSync(skillPath);
+          });
+        } else {
+          // Get all skills in the domain
+          skillsToGenerate = fs.readdirSync(domainTemplatesPath).filter(item => {
+            const itemPath = path.join(domainTemplatesPath, item);
+            return fs.statSync(itemPath).isDirectory();
+          });
+        }
+
+        // Copy each skill
+        for (const skillId of skillsToGenerate) {
+          const sourceSkillPath = path.join(domainTemplatesPath, skillId);
+          const targetSkillPath = path.join(targetFolder, skillId);
+
+          if (!fs.existsSync(sourceSkillPath)) {
+            logger.warn('Skill template not found', { skillId, path: sourceSkillPath });
+            continue;
+          }
+
+          // Create skill folder
+          if (!fs.existsSync(targetSkillPath)) {
+            fs.mkdirSync(targetSkillPath, { recursive: true });
+          }
+
+          // Copy SKILL.md file
+          const sourceFile = path.join(sourceSkillPath, 'SKILL.md');
+          const targetFile = path.join(targetSkillPath, fileExtension);
+
+          if (fs.existsSync(sourceFile)) {
+            let content = fs.readFileSync(sourceFile, 'utf8');
+            // Replace SKILL.md references with RULE.md for Cursor
+            if (config.tool === 'cursor') {
+              content = content.replace(/SKILL\.md/g, 'RULE.md');
+            }
+            fs.writeFileSync(targetFile, content);
+            skillsGenerated++;
+            logger.debug('Copied skill', { skillId, targetFile });
+          }
+
+          // Copy references folder if exists
+          const sourceRefs = path.join(sourceSkillPath, 'references');
+          const targetRefs = path.join(targetSkillPath, 'references');
+          if (fs.existsSync(sourceRefs)) {
+            this.copyFolderRecursive(sourceRefs, targetRefs);
+          }
+
+          // Copy templates folder if exists
+          const sourceTemplates = path.join(sourceSkillPath, 'templates');
+          const targetTemplates = path.join(targetSkillPath, 'templates');
+          if (fs.existsSync(sourceTemplates)) {
+            this.copyFolderRecursive(sourceTemplates, targetTemplates);
+          }
+        }
+      }
+
+      logger.info('Skills generated successfully', { count: skillsGenerated, targetFolder });
     } catch (error) {
       logger.error('Failed to generate skills', error);
       throw error;
+    }
+  }
+
+  /**
+   * Recursively copy a folder
+   */
+  private copyFolderRecursive(source: string, target: string): void {
+    if (!fs.existsSync(target)) {
+      fs.mkdirSync(target, { recursive: true });
+    }
+
+    const items = fs.readdirSync(source);
+    for (const item of items) {
+      const sourcePath = path.join(source, item);
+      const targetPath = path.join(target, item);
+
+      if (fs.statSync(sourcePath).isDirectory()) {
+        this.copyFolderRecursive(sourcePath, targetPath);
+      } else {
+        fs.copyFileSync(sourcePath, targetPath);
+      }
     }
   }
 
