@@ -2,6 +2,8 @@
 
 **Import production-ready development skills for Claude Code, Cursor, GitHub Copilot, and other AI coding assistants directly from VS Code.**
 
+<img width="300" height="300" alt="icon" src="https://github.com/user-attachments/assets/c619b9e7-6789-498d-9be7-5e9e38a7c32c" />
+
 SkillSet for VS Code brings the power of the [SkillSet CLI](https://github.com/patricio0312rev/skillset) directly into your editor with an intuitive visual interface, tree views, and quick setup wizards.
 
 ## Features
@@ -64,6 +66,9 @@ The extension adds two tree views to your sidebar:
 - **Available Skills** - Browse all 100+ skills from the library
 
 Click any skill to open and view its contents.
+
+![demo](https://github.com/user-attachments/assets/a3da23a0-a561-4f09-81ca-be99a5a8a5c8)
+
 
 ## Commands
 
