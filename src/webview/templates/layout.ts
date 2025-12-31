@@ -6,11 +6,8 @@
 export const layout = `
   <div class="container">
     <div class="header">
-      <svg class="header-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="3" width="4" height="18" stroke="currentColor" stroke-width="2"/>
-        <rect x="10" y="3" width="4" height="18" stroke="currentColor" stroke-width="2"/>
-        <rect x="16" y="3" width="4" height="18" stroke="currentColor" stroke-width="2"/>
-        <rect x="3" y="2" width="18" height="20" stroke="currentColor" stroke-width="2" fill="none"/>
+      <svg class="header-icon" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 1l1-1h2l1 1v13.5l-1 .5h-2l-1-.5V1zm1 0v13h2V1h-2zm5 0l1-1h2l1 1v13.5l-1 .5h-2l-1-.5V1zm1 0v13h2V1h-2zm7.71 2.29l-3-3-.71.71 3 3v10.5l.71.71.29-.29V3.29z"/>
       </svg>
       <h1>Skillset Manager</h1>
     </div>

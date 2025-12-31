@@ -74,14 +74,8 @@ export class SkillSetPanel {
     this._panel = panel;
     this._extensionUri = extensionUri;
 
-    // Set panel icon - library icon to match sidebar
-    const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M2 2h3v12H2V2zm4 0h3v12H6V2zm4 0h3v12h-3V2z"/>
-      <path d="M1 1v14h14V1H1zm1 1h12v12H2V2z"/>
-    </svg>`;
-
-    const iconUri = vscode.Uri.parse(`data:image/svg+xml;base64,${Buffer.from(svgIcon).toString('base64')}`);
-    this._panel.iconPath = iconUri;
+    // Set panel icon to match the sidebar library icon
+    this._panel.iconPath = vscode.Uri.joinPath(extensionUri, 'resources', 'library.svg');
 
     // Set initial HTML content
     this._update();
