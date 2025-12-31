@@ -1,0 +1,54 @@
+# Source files
+src/**
+tsconfig.json
+esbuild.js
+.eslintrc.json
+
+# Build artifacts (keep only bundled files)
+out/**
+dist/**
+!dist/extension.js
+!dist/templates/**
+!dist/lib/**
+
+# Dependencies (bundled)
+node_modules/**
+
+# IDE
+.vscode-test/
+.vscode/**
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/**
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Misc
+.DS_Store
+*.vsix
+.editorconfig
+.prettierrc
+.prettierignore
+
+# Documentation (if you don't want to include in package)
+# README.md
+# CHANGELOG.md
+# LICENSE
+
+# Tests
+**/*.test.ts
+**/*.spec.ts
+**/test/**
