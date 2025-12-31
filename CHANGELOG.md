@@ -5,9 +5,36 @@ All notable changes to the SkillSet VS Code extension will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2024-12-31
+
+### Fixed
+
+- Fixed production runtime error "Cannot find module '@patricio0312rev/skillset'" by bundling the dependency
+- Removed dynamic `require.resolve()` calls that were causing module resolution failures in production
+- Fixed skill preview path to use bundled templates from `dist/templates/` instead of `node_modules/`
+
+### Changed
+
+- Updated webview panel tab icon to use the library icon matching the sidebar
+- Updated webview header icon to match the VS Code library codicon (2 vertical + 1 diagonal book)
+- Added `resources/library.svg` for consistent icon usage across the extension
+
+## [0.1.2] - 2024-12-31
+
+### Fixed
+
+- Fixed extension not activating in production due to unbundled dependencies
+
+## [0.1.1] - 2024-12-31
+
+### Added
+
+- Added publish scripts: `publish:vscode`, `publish:ovsx`, and `publish:all` for marketplace publishing
+
 ## [0.1.0] - 2024-12-31
 
 ### Added
+
 - Initial release of SkillSet for VS Code
 - Single-page Skillset Manager with compact card layout
 - Quick Setup with 6 pre-configured presets
@@ -27,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Library icon (📚) for extension branding
 
 ### Features
+
 - 📚 Browse and install 100+ production-ready skills
 - ⚡ Quick setup with pre-configured bundles
 - 🌳 Hierarchical tree views showing tool folders → skill folders → files
@@ -37,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ➕ Add individual skills with one click
 
 ### Fixed
+
 - Fixed ENOENT errors when skill directories don't exist
 - Fixed empty "Select Your AI Tool" dropdown in Skills Manager
 - Fixed skill generation creating placeholder files instead of full templates
@@ -45,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed nested script tag issue in webview preventing proper initialization
 
 ### Changed
+
 - Converted Skills Manager from multi-step wizard to single-page layout
 - Updated tree view to show hierarchical structure (tool folder → skill folder → files)
 - Unified branding to "Skillset Manager" (lowercase 's')
@@ -55,7 +85,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated webview tab to show library icon
 
 ### Technical
-- Marked `@patricio0312rev/skillset` as external in esbuild to preserve template paths
+
+- Bundle `@patricio0312rev/skillset` directly into extension for production reliability
+- Copy skill templates to `dist/templates/` during build process
 - Added directory existence checks before reading to prevent errors
 - Implemented duplicate folder path filtering in tree view provider
 - Fixed module type handling in webview script injection
@@ -64,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
+
 - Skill update functionality to refresh existing skills
 - Individual skill installation from available tree view
 - Skill search and filtering
