@@ -297,7 +297,9 @@
     "watch": "node esbuild.js --watch",
     "lint": "eslint src --ext ts",
     "package": "npm run build && npx @vscode/vsce package",
-    "publish": "npm run build && npx @vscode/vsce publish"
+    "publish:vscode": "npm run build && npx @vscode/vsce publish",
+    "publish:ovsx": "npm run build && npx ovsx publish",
+    "publish:all": "npm run publish:vscode && npm run publish:ovsx"
   },
   "devDependencies": {
     "@types/node": "^20.10.6",
@@ -307,6 +309,7 @@
     "@vscode/vsce": "^2.22.0",
     "esbuild": "^0.27.2",
     "eslint": "^8.56.0",
+    "ovsx": "^0.9.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {
