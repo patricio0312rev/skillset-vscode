@@ -18,14 +18,6 @@ export class SkillSetService {
     logger.info('Generating skills', { config, workspaceRoot });
 
     try {
-      // Log package version and location
-      const skillsetPath = require.resolve('@patricio0312rev/skillset');
-      const skillsetPkg = require('@patricio0312rev/skillset/package.json');
-      logger.info('Using skillset package', {
-        version: skillsetPkg.version,
-        path: skillsetPath
-      });
-
       // Change to workspace directory for skill generation
       const originalCwd = process.cwd();
       process.chdir(workspaceRoot);
@@ -212,7 +204,7 @@ export class SkillSetService {
         id: 'foundation',
         name: 'Foundation',
         icon: '🔧',
-        description: 'Project setup, development environment, and documentation',
+        description: 'Project setup, dev environment, and documentation',
         skillCount: 11,
       },
       frontend: {

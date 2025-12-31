@@ -24,9 +24,9 @@ export async function previewSkillCommand(skillId: string, domainId: string): Pr
     const libraryDomainId = domainMapping[domainId] || domainId;
 
     // Construct path to skill template
-    // Templates are in: templates/{domain}/{skill-id}/SKILL.md
+    // Templates are in: dist/templates/{domain}/{skill-id}/SKILL.md (copied during build)
     const templatePath = vscode.Uri.file(
-      `${extensionPath}/node_modules/@patricio0312rev/skillset/templates/${libraryDomainId}/${skillId}/SKILL.md`
+      `${extensionPath}/dist/templates/${libraryDomainId}/${skillId}/SKILL.md`
     );
 
     try {
