@@ -309,7 +309,6 @@
     "@vscode/vsce": "^2.22.0",
     "esbuild": "^0.27.2",
     "eslint": "^8.56.0",
-    "ovsx": "^0.9.5",
     "typescript": "^5.3.3"
   },
   "dependencies": {
