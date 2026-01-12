@@ -13,6 +13,9 @@ import { updateSkillsCommand } from './commands/updateSkills';
 import { viewSkillCommand } from './commands/viewSkill';
 import { previewSkillCommand } from './commands/previewSkill';
 import { addSkillCommand } from './commands/addSkill';
+import { searchSkillsCommand } from './commands/searchSkills';
+import { quickSearchCommand } from './commands/quickSearch';
+import { toggleFavoriteCommand } from './commands/toggleFavorite';
 import { logger } from './utils/logger';
 import {
   COMMANDS,
@@ -37,7 +40,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   // Initialize tree data providers
   const installedProvider = new InstalledSkillsProvider(fileSystemService);
-  const availableProvider = new AvailableSkillsProvider(skillSetService);
+  const availableProvider = new AvailableSkillsProvider(skillSetService, configService);
 
   // Register tree views
   const installedTreeView = vscode.window.createTreeView(TREE_VIEW_IDS.INSTALLED, {
@@ -98,7 +101,7 @@ function registerCommands(
 ): void {
   // Open panel command
   const openPanelCommand = vscode.commands.registerCommand(COMMANDS.OPEN_PANEL, () => {
-    SkillSetPanel.createOrShow(context.extensionUri, skillSetService, fileSystemService, () => {
+    SkillSetPanel.createOrShow(context.extensionUri, skillSetService, fileSystemService, configService, () => {
       installedProvider.refresh();
       availableProvider.refresh();
     });
@@ -162,6 +165,33 @@ function registerCommands(
     }
   );
 
+  // Search skills in tree view command
+  const searchSkillsCmd = vscode.commands.registerCommand(
+    COMMANDS.SEARCH_SKILLS,
+    () => searchSkillsCommand(availableProvider)
+  );
+
+  // Quick search via command palette
+  const quickSearchCmd = vscode.commands.registerCommand(
+    COMMANDS.QUICK_SEARCH,
+    () => quickSearchCommand(skillSetService, configService)
+  );
+
+  // Toggle favorite command
+  const toggleFavoriteCmd = vscode.commands.registerCommand(
+    COMMANDS.TOGGLE_FAVORITE,
+    (treeItem: any) => toggleFavoriteCommand(treeItem, configService, availableProvider)
+  );
+
+  // Clear search filter command
+  const clearSearchCmd = vscode.commands.registerCommand(
+    COMMANDS.CLEAR_SEARCH,
+    () => {
+      availableProvider.clearFilter();
+      vscode.window.setStatusBarMessage('Search filter cleared', 2000);
+    }
+  );
+
   // Add all commands to subscriptions
   context.subscriptions.push(
     openPanelCommand,
@@ -173,7 +203,11 @@ function registerCommands(
     viewSkillCmd,
     openSettingsCmd,
     previewSkillCmd,
-    addSkillCmd
+    addSkillCmd,
+    searchSkillsCmd,
+    quickSearchCmd,
+    toggleFavoriteCmd,
+    clearSearchCmd
   );
 
   logger.info('All commands registered');
