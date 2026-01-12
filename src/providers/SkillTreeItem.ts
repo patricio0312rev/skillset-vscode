@@ -9,7 +9,7 @@ export class SkillTreeItem extends vscode.TreeItem {
   constructor(
     public readonly label: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-    public readonly type: 'tool-folder' | 'skill-folder' | 'skill-file' | 'domain' | 'available-skill',
+    public readonly type: 'tool-folder' | 'skill-folder' | 'skill-file' | 'domain' | 'available-skill' | 'favorites-section' | 'favorite-skill',
     public readonly folderUri?: vscode.Uri,
     public readonly skillPath?: string,
     public readonly domainId?: string
@@ -41,6 +41,11 @@ export class SkillTreeItem extends vscode.TreeItem {
       this.iconPath = new vscode.ThemeIcon('folder');
     } else if (type === 'available-skill') {
       this.iconPath = new vscode.ThemeIcon('file');
+    } else if (type === 'favorites-section') {
+      this.iconPath = new vscode.ThemeIcon('star-full');
+      this.tooltip = 'Your favorite skills';
+    } else if (type === 'favorite-skill') {
+      this.iconPath = new vscode.ThemeIcon('star-full');
     }
   }
 
