@@ -12,6 +12,9 @@ SkillSet for VS Code brings the power of the [SkillSet CLI](https://github.com/p
 - **🎯 Visual Skill Manager** - Beautiful webview interface for browsing and installing skills
 - **⚡ Quick Setup Presets** - Get started in seconds with pre-configured skill bundles
 - **🌳 Tree View Sidebar** - Browse installed and available skills at a glance
+- **🔍 Skill Search** - Find skills quickly with tree view filter and command palette search
+- **⭐ Skill Favorites** - Mark your most-used skills for quick access across sessions
+- **🔗 Skill Dependencies** - View prerequisites and related skills before installing
 - **🔄 Auto-Refresh** - Automatically detects changes to skill files
 - **🛠️ Multi-Tool Support** - Works with Claude Code, Cursor, GitHub Copilot, and more
 - **📊 10 Specialized Domains** - Foundation, Frontend, Backend, AI Engineering, Architecture, CI/CD, Database, Testing, Security, Performance
@@ -69,7 +72,6 @@ Click any skill to open and view its contents.
 
 ![demo](https://github.com/user-attachments/assets/a3da23a0-a561-4f09-81ca-be99a5a8a5c8)
 
-
 ## Commands
 
 Access all commands via the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
@@ -77,6 +79,9 @@ Access all commands via the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
 - `SkillSet: Open SkillSet Manager` - Open the visual skill manager
 - `SkillSet: Quick Setup` - Quick installation with presets
 - `SkillSet: Initialize Skills` - Step-by-step skill installation
+- `SkillSet: Quick Search` - Search all skills with fuzzy matching
+- `SkillSet: Search Skills` - Filter skills in tree view
+- `SkillSet: Toggle Favorite` - Add or remove skill from favorites
 - `SkillSet: Refresh Skills` - Refresh skill tree views
 - `SkillSet: Update Skills` - Update existing skills to latest versions
 - `SkillSet: Remove All Skills` - Remove all installed skills
@@ -101,24 +106,27 @@ Customize SkillSet in VS Code settings:
   "skillset.showWelcome": true,
 
   // Pre-selected domains for quick initialization
-  "skillset.defaultDomains": ["foundation", "backend", "frontend"]
+  "skillset.defaultDomains": ["foundation", "backend", "frontend"],
+
+  // Your favorite skills for quick access
+  "skillset.favoriteSkills": ["project-scaffolder", "git-hygiene-enforcer"]
 }
 ```
 
 ## Available Domains
 
-| Domain            | Skills | Description                                               |
-| ----------------- | ------ | --------------------------------------------------------- |
-| 🔧 Foundation     | 11     | Project setup, development environment, and documentation |
-| 🎨 Frontend       | 10     | React, UI components, and user experience                 |
-| ⚙️ Backend        | 10     | APIs, authentication, and server-side logic               |
-| 🤖 AI Engineering | 10     | LLMs, RAG, agents, and AI systems                         |
-| 🏗️ Architecture   | 10     | System design, scalability, and technical decisions       |
-| 🔄 CI/CD          | 10     | Automation, deployments, and release management           |
-| 💾 Database       | 10     | Migrations, optimization, and data engineering            |
-| 🧪 Testing        | 10     | Quality assurance and test coverage                       |
-| 🔒 Security       | 10     | Security hardening and privacy protection                 |
-| 📊 Performance    | 10     | Observability, monitoring, and optimization               |
+| Domain            | Skills | Description                                         |
+| ----------------- | ------ | --------------------------------------------------- |
+| 🔧 Foundation     | 11     | Project setup, development environment, and docs    |
+| 🎨 Frontend       | 10     | React, UI components, and user experience           |
+| ⚙️ Backend        | 10     | APIs, authentication, and server-side logic         |
+| 🤖 AI Engineering | 10     | LLMs, RAG, agents, and AI systems                   |
+| 🏗️ Architecture   | 10     | System design, scalability, and technical decisions |
+| 🔄 CI/CD          | 10     | Automation, deployments, and release management     |
+| 💾 Database       | 10     | Migrations, optimization, and data engineering      |
+| 🧪 Testing        | 10     | Quality assurance and test coverage                 |
+| 🔒 Security       | 10     | Security hardening and privacy protection           |
+| 📊 Performance    | 10     | Observability, monitoring, and optimization         |
 
 ## Tool-Specific Folders
 
