@@ -2,7 +2,7 @@
   "name": "skillset-vscode",
   "displayName": "Skillset - AI Skills Generator and Manager",
   "description": "Import production-ready AI skills for Claude Code, Cursor, GitHub Copilot, and other coding assistants",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "publisher": "patricio0312rev",
   "icon": "resources/icon.png",
   "author": {
@@ -102,6 +102,30 @@
         "title": "Add Skill",
         "category": "SkillSet",
         "icon": "$(add)"
+      },
+      {
+        "command": "skillset.searchSkills",
+        "title": "Search Skills",
+        "category": "SkillSet",
+        "icon": "$(search)"
+      },
+      {
+        "command": "skillset.quickSearch",
+        "title": "Quick Search Skills",
+        "category": "SkillSet",
+        "icon": "$(search)"
+      },
+      {
+        "command": "skillset.toggleFavorite",
+        "title": "Toggle Favorite",
+        "category": "SkillSet",
+        "icon": "$(star)"
+      },
+      {
+        "command": "skillset.clearSearch",
+        "title": "Clear Search Filter",
+        "category": "SkillSet",
+        "icon": "$(close)"
       }
     ],
     "viewsContainers": {
@@ -142,6 +166,11 @@
     "menus": {
       "view/title": [
         {
+          "command": "skillset.searchSkills",
+          "when": "view == skillset-available",
+          "group": "navigation@0"
+        },
+        {
           "command": "skillset.openPanel",
           "when": "view == skillset-installed || view == skillset-available",
           "group": "navigation@1"
@@ -179,13 +208,18 @@
           "group": "inline"
         },
         {
+          "command": "skillset.toggleFavorite",
+          "when": "view == skillset-available && (viewItem == available-skill || viewItem == favorite-skill)",
+          "group": "inline@0"
+        },
+        {
           "command": "skillset.previewSkill",
-          "when": "view == skillset-available && viewItem == available-skill",
+          "when": "view == skillset-available && (viewItem == available-skill || viewItem == favorite-skill)",
           "group": "inline@1"
         },
         {
           "command": "skillset.addSkill",
-          "when": "view == skillset-available && viewItem == available-skill",
+          "when": "view == skillset-available && (viewItem == available-skill || viewItem == favorite-skill)",
           "group": "inline@2"
         }
       ],
@@ -215,6 +249,14 @@
           "when": "workspaceFolderCount > 0"
         },
         {
+          "command": "skillset.quickSearch",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
+          "command": "skillset.searchSkills",
+          "when": "workspaceFolderCount > 0"
+        },
+        {
           "command": "skillset.viewSkill",
           "when": "false"
         },
@@ -224,6 +266,14 @@
         },
         {
           "command": "skillset.addSkill",
+          "when": "false"
+        },
+        {
+          "command": "skillset.toggleFavorite",
+          "when": "false"
+        },
+        {
+          "command": "skillset.clearSearch",
           "when": "false"
         }
       ]
@@ -286,6 +336,14 @@
             "frontend"
           ],
           "description": "Default domains to pre-select during skill initialization"
+        },
+        "skillset.favoriteSkills": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "List of favorite skill IDs for quick access"
         }
       }
     }
@@ -312,6 +370,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@patricio0312rev/skillset": "^0.1.3"
+    "@patricio0312rev/skillset": "^0.2.1"
   }
 }
