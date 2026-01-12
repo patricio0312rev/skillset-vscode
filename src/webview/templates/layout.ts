@@ -13,6 +13,12 @@ export const layout = `
     </div>
     <p class="subtitle">Import production-ready development skills for your AI coding assistant</p>
 
+    <!-- Search Box -->
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Search skills..." class="search-input" />
+      <button id="clearSearchBtn" class="search-clear" style="display: none;">Clear</button>
+    </div>
+
     <!-- Select Tool -->
     <div class="step">
       <div class="step-header">
@@ -29,6 +35,15 @@ export const layout = `
         <span class="step-title">Select Skill Domains</span>
       </div>
       <div class="department-grid" id="departmentGrid"></div>
+
+      <!-- Favorites Section (inside domains step) -->
+      <div class="favorites-section" id="favoritesSection" style="display: none;">
+        <div class="favorites-header">
+          <span class="favorites-icon">&#9733;</span>
+          <span class="favorites-title">Quick Add from Favorites</span>
+        </div>
+        <div class="favorites-grid" id="favoritesGrid"></div>
+      </div>
     </div>
 
     <!-- Select Skills -->
