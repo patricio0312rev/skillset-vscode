@@ -43,6 +43,18 @@ export const COMMANDS = {
 
   /** Add a single skill from the available skills */
   ADD_SKILL: 'skillset.addSkill',
+
+  /** Search/filter skills in tree view */
+  SEARCH_SKILLS: 'skillset.searchSkills',
+
+  /** Quick search skills via command palette */
+  QUICK_SEARCH: 'skillset.quickSearch',
+
+  /** Toggle skill favorite status */
+  TOGGLE_FAVORITE: 'skillset.toggleFavorite',
+
+  /** Clear search filter */
+  CLEAR_SEARCH: 'skillset.clearSearch',
 } as const;
 
 /**
@@ -64,6 +76,9 @@ export const CONFIG_KEYS = {
 
   /** Pre-selected domains for quick initialization */
   DEFAULT_DOMAINS: 'skillset.defaultDomains',
+
+  /** User's favorite skill IDs */
+  FAVORITE_SKILLS: 'skillset.favoriteSkills',
 } as const;
 
 /**
@@ -131,7 +146,7 @@ export const DOMAINS = {
     id: 'foundation',
     name: 'Foundation',
     icon: '🔧',
-    description: 'Project setup, development environment, and documentation',
+    description: 'Project setup, development environment, and docs',
     skillCount: 11,
   },
   FRONTEND: {
