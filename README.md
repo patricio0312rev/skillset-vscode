@@ -8,13 +8,13 @@ SkillSet for VS Code brings the power of the [SkillSet CLI](https://github.com/p
 
 ## Features
 
-- **📚 100+ Production-Ready Skills** - From project setup to deployment, security to AI engineering
+- **📚 155+ Production-Ready Skills** - From project setup to deployment, security to AI engineering
 - **🎯 Visual Skill Manager** - Beautiful webview interface for browsing and installing skills
 - **⚡ Quick Setup Presets** - Get started in seconds with pre-configured skill bundles
 - **🌳 Tree View Sidebar** - Browse installed and available skills at a glance
-- **🔍 Skill Search** - Find skills quickly with tree view filter and command palette search
-- **⭐ Skill Favorites** - Mark your most-used skills for quick access across sessions
-- **🔗 Skill Dependencies** - View prerequisites and related skills before installing
+- **🔍 Skill Search** - Find skills quickly with tree view filter, command palette quick search with fuzzy matching, and real-time filtering in the webview manager
+- **⭐ Skill Favorites** - Mark your most-used skills with star buttons, view them in a dedicated sidebar section, and quickly add them from the webview manager (persists across sessions)
+- **🔗 Skill Dependencies** - View prerequisites, related skills, and suggested next skills for 40+ skills with dependency data
 - **🔄 Auto-Refresh** - Automatically detects changes to skill files
 - **🛠️ Multi-Tool Support** - Works with Claude Code, Cursor, GitHub Copilot, and more
 - **📊 10 Specialized Domains** - Foundation, Frontend, Backend, AI Engineering, Architecture, CI/CD, Database, Testing, Security, Performance
@@ -70,6 +70,35 @@ The extension adds two tree views to your sidebar:
 
 Click any skill to open and view its contents.
 
+#### 4. Search Skills
+
+Find skills quickly using multiple methods:
+
+- **Tree View Filter** - Click the search icon in the tree view title bar to filter by name, ID, or description
+- **Quick Search** - Use `SkillSet: Quick Search` command for fuzzy matching with instant skill preview
+- **Webview Search** - Real-time filtering in the visual skill manager
+
+#### 5. Skill Favorites
+
+Mark frequently used skills for quick access:
+
+- **Star Button** - Click the star icon on any skill in the webview manager
+- **Right-Click Menu** - Toggle favorite status from the context menu in tree view
+- **Favorites Section** - View all favorites in a dedicated sidebar section
+- **Webview Quick-Add** - Add favorites directly from the visual manager
+
+Favorites persist across VS Code sessions.
+
+#### 6. Skill Dependencies
+
+Understand skill relationships before installing:
+
+- **Prerequisites** - Skills that should be installed first
+- **Related Skills** - Complementary skills that work well together
+- **Suggested Next** - Recommended skills to explore after installation
+
+Dependency information is displayed in the skill preview and covers 40+ skills.
+
 ![demo](https://github.com/user-attachments/assets/a3da23a0-a561-4f09-81ca-be99a5a8a5c8)
 
 ## Commands
@@ -79,9 +108,9 @@ Access all commands via the Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`):
 - `SkillSet: Open SkillSet Manager` - Open the visual skill manager
 - `SkillSet: Quick Setup` - Quick installation with presets
 - `SkillSet: Initialize Skills` - Step-by-step skill installation
-- `SkillSet: Quick Search` - Search all skills with fuzzy matching
-- `SkillSet: Search Skills` - Filter skills in tree view
-- `SkillSet: Toggle Favorite` - Add or remove skill from favorites
+- `SkillSet: Quick Search` - Open quick pick to search all skills with fuzzy matching and instant preview
+- `SkillSet: Search Skills` - Filter skills in tree view by name, ID, or description
+- `SkillSet: Toggle Favorite` - Add or remove skill from favorites (also available via right-click context menu)
 - `SkillSet: Refresh Skills` - Refresh skill tree views
 - `SkillSet: Update Skills` - Update existing skills to latest versions
 - `SkillSet: Remove All Skills` - Remove all installed skills
@@ -117,16 +146,16 @@ Customize SkillSet in VS Code settings:
 
 | Domain            | Skills | Description                                         |
 | ----------------- | ------ | --------------------------------------------------- |
-| 🔧 Foundation     | 11     | Project setup, development environment, and docs    |
-| 🎨 Frontend       | 10     | React, UI components, and user experience           |
-| ⚙️ Backend        | 10     | APIs, authentication, and server-side logic         |
-| 🤖 AI Engineering | 10     | LLMs, RAG, agents, and AI systems                   |
+| 🔧 Foundation     | 23     | Project setup, development environment, and docs    |
+| 🎨 Frontend       | 19     | React, UI components, and user experience           |
+| ⚙️ Backend        | 16     | APIs, authentication, and server-side logic         |
+| 🤖 AI Engineering | 16     | LLMs, RAG, agents, and AI systems                   |
 | 🏗️ Architecture   | 10     | System design, scalability, and technical decisions |
-| 🔄 CI/CD          | 10     | Automation, deployments, and release management     |
+| 🔄 CI/CD          | 14     | Automation, deployments, and release management     |
 | 💾 Database       | 10     | Migrations, optimization, and data engineering      |
-| 🧪 Testing        | 10     | Quality assurance and test coverage                 |
-| 🔒 Security       | 10     | Security hardening and privacy protection           |
-| 📊 Performance    | 10     | Observability, monitoring, and optimization         |
+| 🧪 Testing        | 22     | Quality assurance and test coverage                 |
+| 🔒 Security       | 14     | Security hardening and privacy protection           |
+| 📊 Performance    | 11     | Observability, monitoring, and optimization         |
 
 ## Tool-Specific Folders
 
