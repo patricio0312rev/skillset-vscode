@@ -126,6 +126,66 @@ export class ConfigService {
   }
 
   /**
+   * Get favorite skill IDs from settings
+   * @returns Array of favorite skill IDs
+   */
+  public getFavoriteSkills(): string[] {
+    const favorites = this.config.get<string[]>(CONFIG_KEYS.FAVORITE_SKILLS, []);
+    logger.debug('Getting favorite skills', { count: favorites.length });
+    return favorites;
+  }
+
+  /**
+   * Add skill to favorites
+   * @param skillId Skill identifier to add
+   */
+  public async addFavoriteSkill(skillId: string): Promise<void> {
+    const favorites = this.getFavoriteSkills();
+    if (!favorites.includes(skillId)) {
+      favorites.push(skillId);
+      logger.info('Adding skill to favorites', { skillId });
+      await this.config.update(CONFIG_KEYS.FAVORITE_SKILLS, favorites, vscode.ConfigurationTarget.Global);
+      this.refresh();
+    }
+  }
+
+  /**
+   * Remove skill from favorites
+   * @param skillId Skill identifier to remove
+   */
+  public async removeFavoriteSkill(skillId: string): Promise<void> {
+    const favorites = this.getFavoriteSkills();
+    const index = favorites.indexOf(skillId);
+    if (index > -1) {
+      favorites.splice(index, 1);
+      logger.info('Removing skill from favorites', { skillId });
+      await this.config.update(CONFIG_KEYS.FAVORITE_SKILLS, favorites, vscode.ConfigurationTarget.Global);
+      this.refresh();
+    }
+  }
+
+  /**
+   * Check if skill is a favorite
+   * @param skillId Skill identifier
+   * @returns True if skill is in favorites
+   */
+  public isFavoriteSkill(skillId: string): boolean {
+    return this.getFavoriteSkills().includes(skillId);
+  }
+
+  /**
+   * Toggle favorite status for a skill
+   * @param skillId Skill identifier
+   */
+  public async toggleFavoriteSkill(skillId: string): Promise<void> {
+    if (this.isFavoriteSkill(skillId)) {
+      await this.removeFavoriteSkill(skillId);
+    } else {
+      await this.addFavoriteSkill(skillId);
+    }
+  }
+
+  /**
    * Get all extension settings as a single object
    * @returns Object containing all settings
    */
@@ -135,6 +195,7 @@ export class ConfigService {
     autoRefresh: boolean;
     showWelcome: boolean;
     defaultDomains: DomainId[];
+    favoriteSkills: string[];
   } {
     return {
       defaultTool: this.getDefaultTool(),
@@ -142,6 +203,7 @@ export class ConfigService {
       autoRefresh: this.getAutoRefresh(),
       showWelcome: this.getShowWelcome(),
       defaultDomains: this.getDefaultDomains(),
+      favoriteSkills: this.getFavoriteSkills(),
     };
   }
 }
