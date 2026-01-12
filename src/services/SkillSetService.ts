@@ -297,7 +297,7 @@ export class SkillSetService {
         id: 'foundation',
         name: 'Foundation',
         icon: '🔧',
-        description: 'Project setup, dev environment, and documentation',
+        description: 'Project setup, dev environment, and docs',
         skillCount: 11,
       },
       frontend: {

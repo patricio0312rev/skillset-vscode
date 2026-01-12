@@ -52,7 +52,7 @@ export const DOMAINS: Record<string, Domain> = {
     id: 'foundation',
     name: 'Foundation',
     icon: '🔧',
-    description: 'Project setup, development environment, and documentation',
+    description: 'Project setup, development environment, and docs',
     skillCount: 11,
   },
   frontend: {

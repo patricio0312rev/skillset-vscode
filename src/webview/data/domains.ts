@@ -16,7 +16,7 @@ export const DOMAINS_DATA: DomainData[] = [
     id: 'foundation',
     name: 'Foundation',
     icon: '🔧',
-    desc: 'Project setup, development environment, and documentation',
+    desc: 'Project setup, development environment, and docs',
     skillCount: 11,
   },
   {
