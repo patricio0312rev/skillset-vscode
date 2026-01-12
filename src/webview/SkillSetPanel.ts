@@ -2,8 +2,9 @@ import * as vscode from 'vscode';
 import { getWebviewContent } from './webviewContent';
 import { SkillSetService } from '../services/SkillSetService';
 import { FileSystemService } from '../services/FileSystemService';
+import { ConfigService } from '../services/ConfigService';
 import { logger } from '../utils/logger';
-import { EXTENSION_NAME, TIMING } from '../utils/constants';
+import { TIMING } from '../utils/constants';
 
 /**
  * Manages the SkillSet webview panel
@@ -22,12 +23,14 @@ export class SkillSetPanel {
    * @param extensionUri Extension URI for resource loading
    * @param skillSetService SkillSet service instance
    * @param fileSystemService FileSystem service instance
+   * @param configService Config service instance
    * @param onInstallComplete Callback when installation completes
    */
   public static createOrShow(
     extensionUri: vscode.Uri,
     skillSetService: SkillSetService,
     fileSystemService: FileSystemService,
+    configService: ConfigService,
     onInstallComplete: () => void
   ): void {
     const column = vscode.window.activeTextEditor
@@ -57,6 +60,7 @@ export class SkillSetPanel {
       extensionUri,
       skillSetService,
       fileSystemService,
+      configService,
       onInstallComplete
     );
   }
@@ -69,6 +73,7 @@ export class SkillSetPanel {
     extensionUri: vscode.Uri,
     private skillSetService: SkillSetService,
     private fileSystemService: FileSystemService,
+    private configService: ConfigService,
     private onInstallComplete: () => void
   ) {
     this._panel = panel;
@@ -112,8 +117,44 @@ export class SkillSetPanel {
         this._panel.dispose();
         break;
 
+      case 'getFavorites':
+        await this._handleGetFavorites();
+        break;
+
+      case 'toggleFavorite':
+        await this._handleToggleFavorite(message.data);
+        break;
+
       default:
         logger.warn('Unknown webview message command', message);
+    }
+  }
+
+  /**
+   * Handle toggleFavorite request
+   */
+  private async _handleToggleFavorite(data: { skillId: string }): Promise<void> {
+    try {
+      await this.configService.toggleFavoriteSkill(data.skillId);
+      await this._handleGetFavorites();
+    } catch (error) {
+      logger.error('Failed to toggle favorite', error);
+    }
+  }
+
+  /**
+   * Handle getFavorites request
+   */
+  private async _handleGetFavorites(): Promise<void> {
+    try {
+      const favorites = this.configService.getFavoriteSkills();
+
+      this._panel.webview.postMessage({
+        command: 'favoritesData',
+        data: favorites,
+      });
+    } catch (error) {
+      logger.error('Failed to get favorites', error);
     }
   }
 
