@@ -66,7 +66,7 @@ Use `SkillSet: Quick Setup` for instant installation with presets:
 The extension adds two tree views to your sidebar:
 
 - **Installed Skills** - View and manage skills in your workspace
-- **Available Skills** - Browse all 100+ skills from the library
+- **Available Skills** - Browse all 155+ skills from the library
 
 Click any skill to open and view its contents.
 
@@ -183,7 +183,7 @@ The extension is built with:
 ## Related Projects
 
 - [SkillSet CLI](https://github.com/patricio0312rev/skillset) - Command-line tool for skill management
-- [Skills Collection](https://github.com/patricio0312rev/skills) - The complete library of 100+ skills
+- [Skills Collection](https://github.com/patricio0312rev/skills) - The complete library of 155+ skills
 - [AgentKit](https://github.com/patricio0312rev/agentkit) - Scaffold AI agent configurations
 
 ## Contributing
