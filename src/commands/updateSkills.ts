@@ -21,8 +21,8 @@ export async function updateSkillsCommand(): Promise<void> {
     // 4. Show summary of updates
 
     logger.info('Update skills command completed (not yet implemented)');
-  } catch (error: any) {
+  } catch (error) {
     logger.error('Failed to update skills', error);
-    vscode.window.showErrorMessage(`Failed to update skills: ${error.message}`);
+    vscode.window.showErrorMessage(`Failed to update skills: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

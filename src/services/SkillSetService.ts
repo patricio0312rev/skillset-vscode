@@ -172,7 +172,7 @@ export class SkillSetService {
       for (const [libraryId, domain] of Object.entries(domains)) {
         const extensionId = domainMapping[libraryId] || libraryId;
         transformedDomains[extensionId] = {
-          id: extensionId as any,
+          id: extensionId,
           name: domain.name,
           description: domain.description,
           skillCount: domain.skills?.length || 0,
@@ -206,7 +206,7 @@ export class SkillSetService {
             skills.push({
               id: skillId,
               name: this.formatSkillName(skillId),
-              domain: domainId as any,
+              domain: domainId,
               description: `Skill from ${domain.name} domain`,
             });
           }
@@ -243,7 +243,7 @@ export class SkillSetService {
       return skillIds.map((skillId) => ({
         id: skillId,
         name: this.formatSkillName(skillId),
-        domain: domainId as any,
+        domain: domainId,
         description: `${this.formatSkillName(skillId)} skill`,
       }));
     } catch (error) {

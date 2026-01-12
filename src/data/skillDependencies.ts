@@ -211,13 +211,13 @@ export function getSkillDependencies(skillId: string): SkillDependency | undefin
  */
 export function getRelatedSkills(skillId: string): string[] {
   const deps = SKILL_DEPENDENCIES[skillId];
-  if (!deps) return [];
+  if (!deps) { return []; }
 
   const related = new Set<string>();
 
-  if (deps.requires) deps.requires.forEach(s => related.add(s));
-  if (deps.relatedTo) deps.relatedTo.forEach(s => related.add(s));
-  if (deps.suggestsNext) deps.suggestsNext.forEach(s => related.add(s));
+  if (deps.requires) { deps.requires.forEach(s => related.add(s)); }
+  if (deps.relatedTo) { deps.relatedTo.forEach(s => related.add(s)); }
+  if (deps.suggestsNext) { deps.suggestsNext.forEach(s => related.add(s)); }
 
   return Array.from(related);
 }

@@ -3,7 +3,6 @@ import { SkillTreeItem } from './SkillTreeItem';
 import { SkillSetService } from '../services/SkillSetService';
 import { ConfigService } from '../services/ConfigService';
 import { logger } from '../utils/logger';
-import { Domain } from '../models/Domain';
 
 /**
  * Tree data provider for available skills
@@ -123,7 +122,7 @@ export class AvailableSkillsProvider implements vscode.TreeDataProvider<SkillTre
 
       for (const skillId of favoriteIds) {
         const skill = allSkills.find(s => s.id === skillId);
-        if (!skill) continue;
+        if (!skill) { continue; }
 
         const treeItem = new SkillTreeItem(
           skill.name,
@@ -135,7 +134,7 @@ export class AvailableSkillsProvider implements vscode.TreeDataProvider<SkillTre
         );
         treeItem.tooltip = `${skill.description} (${skill.domain})`;
         treeItem.contextValue = 'favorite-skill';
-        (treeItem as any).skillId = skill.id;
+        treeItem.skillId = skill.id;
         skillItems.push(treeItem);
       }
 
@@ -166,7 +165,7 @@ export class AvailableSkillsProvider implements vscode.TreeDataProvider<SkillTre
             skill.id.toLowerCase().includes(this._filterText) ||
             skill.description?.toLowerCase().includes(this._filterText)
           );
-          if (matchingSkills.length === 0) continue;
+          if (matchingSkills.length === 0) { continue; }
         }
 
         const label = `${domain.name} (${domain.skillCount})`;
@@ -229,7 +228,7 @@ export class AvailableSkillsProvider implements vscode.TreeDataProvider<SkillTre
         treeItem.tooltip = skill.description;
         treeItem.contextValue = 'available-skill';
         // Store skill ID for commands
-        (treeItem as any).skillId = skill.id;
+        treeItem.skillId = skill.id;
         // Show star icon for favorites
         if (isFavorite) {
           treeItem.iconPath = new vscode.ThemeIcon('star-full');

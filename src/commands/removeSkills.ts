@@ -70,14 +70,14 @@ export async function removeSkillsCommand(
     installedProvider.refresh();
 
     // Show success message that auto-dismisses
-    const statusBarMessage = vscode.window.setStatusBarMessage(
+    vscode.window.setStatusBarMessage(
       `✓ ${MESSAGES.SKILLS_REMOVED}`,
       3000 // Auto-dismiss after 3 seconds
     );
 
     logger.info('All skills removed successfully');
-  } catch (error: any) {
+  } catch (error) {
     logger.error('Failed to remove skills', error);
-    vscode.window.showErrorMessage(`Failed to remove skills: ${error.message}`);
+    vscode.window.showErrorMessage(`Failed to remove skills: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

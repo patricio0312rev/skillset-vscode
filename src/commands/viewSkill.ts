@@ -26,8 +26,8 @@ export async function viewSkillCommand(
     // Otherwise treat as relative path
     await fileSystemService.openFile(skillPath);
     logger.info('Skill file opened successfully');
-  } catch (error: any) {
+  } catch (error) {
     logger.error('Failed to open skill file', { skillPath, error });
-    vscode.window.showErrorMessage(`Failed to open skill file: ${error.message}`);
+    vscode.window.showErrorMessage(`Failed to open skill file: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { logger } from '../utils/logger';
-import { getSkillDependencies, getRelatedSkills } from '../data/skillDependencies';
+import { getSkillDependencies } from '../data/skillDependencies';
 
 /**
  * Format skill ID to display name

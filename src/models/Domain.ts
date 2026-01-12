@@ -4,8 +4,8 @@ import { DomainId } from './SkillConfig';
  * Domain metadata and skill information
  */
 export interface Domain {
-  /** Unique domain identifier */
-  id: DomainId;
+  /** Unique domain identifier (can be dynamic from library) */
+  id: string;
 
   /** Display name for UI */
   name: string;
@@ -33,8 +33,8 @@ export interface Skill {
   /** Display name for UI */
   name: string;
 
-  /** Domain this skill belongs to */
-  domain: DomainId;
+  /** Domain this skill belongs to (can be dynamic from library) */
+  domain: string;
 
   /** Short description of what the skill does */
   description: string;

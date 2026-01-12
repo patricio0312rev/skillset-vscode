@@ -14,7 +14,7 @@ import { ToolType, DomainId } from '../models/SkillConfig';
 export async function quickPickCommand(
   skillSetService: SkillSetService,
   fileSystemService: FileSystemService,
-  configService: ConfigService,
+  _configService: ConfigService,
   installedProvider: InstalledSkillsProvider
 ): Promise<void> {
   try {
@@ -113,8 +113,8 @@ export async function quickPickCommand(
     }
 
     logger.info('Skills installed successfully via quick setup', { preset: preset.id });
-  } catch (error: any) {
+  } catch (error) {
     logger.error('Failed to quick setup skills', error);
-    vscode.window.showErrorMessage(`Failed to set up skills: ${error.message}`);
+    vscode.window.showErrorMessage(`Failed to set up skills: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

@@ -100,7 +100,7 @@ export async function initSkillsCommand(
       return;
     }
 
-    let selectedSkills: string[] | undefined = undefined;
+    const selectedSkills: string[] | undefined = undefined;
 
     // If user wants to choose specific skills
     if (!selectAllSkills.value) {
@@ -169,8 +169,8 @@ export async function initSkillsCommand(
     }
 
     logger.info('Skills installed successfully via init command');
-  } catch (error: any) {
+  } catch (error) {
     logger.error('Failed to initialize skills', error);
-    vscode.window.showErrorMessage(`Failed to initialize skills: ${error.message}`);
+    vscode.window.showErrorMessage(`Failed to initialize skills: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

@@ -1,11 +1,13 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
 
 /**
  * Tree item for skills and domains in the sidebar
  * Represents either a domain (folder) or a skill (file)
  */
 export class SkillTreeItem extends vscode.TreeItem {
+  /** Skill ID for available/favorite skills */
+  public skillId?: string;
+
   constructor(
     public readonly label: string,
     public readonly collapsibleState: vscode.TreeItemCollapsibleState,

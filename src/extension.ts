@@ -4,6 +4,7 @@ import { ConfigService } from './services/ConfigService';
 import { FileSystemService } from './services/FileSystemService';
 import { InstalledSkillsProvider } from './providers/InstalledSkillsProvider';
 import { AvailableSkillsProvider } from './providers/AvailableSkillsProvider';
+import { SkillTreeItem } from './providers/SkillTreeItem';
 import { SkillSetPanel } from './webview/SkillSetPanel';
 import { initSkillsCommand } from './commands/initSkills';
 import { quickPickCommand } from './commands/quickPick';
@@ -148,20 +149,24 @@ function registerCommands(
   // Preview skill command
   const previewSkillCmd = vscode.commands.registerCommand(
     COMMANDS.PREVIEW_SKILL,
-    (treeItem: any) => {
+    (treeItem: SkillTreeItem) => {
       const skillId = treeItem.skillId;
       const domainId = treeItem.domainId;
-      previewSkillCommand(skillId, domainId);
+      if (skillId && domainId) {
+        previewSkillCommand(skillId, domainId);
+      }
     }
   );
 
   // Add skill command
   const addSkillCmd = vscode.commands.registerCommand(
     COMMANDS.ADD_SKILL,
-    (treeItem: any) => {
+    (treeItem: SkillTreeItem) => {
       const skillId = treeItem.skillId;
       const domainId = treeItem.domainId;
-      addSkillCommand(skillId, domainId, skillSetService, fileSystemService, configService, installedProvider);
+      if (skillId && domainId) {
+        addSkillCommand(skillId, domainId, skillSetService, fileSystemService, configService, installedProvider);
+      }
     }
   );
 
@@ -180,7 +185,7 @@ function registerCommands(
   // Toggle favorite command
   const toggleFavoriteCmd = vscode.commands.registerCommand(
     COMMANDS.TOGGLE_FAVORITE,
-    (treeItem: any) => toggleFavoriteCommand(treeItem, configService, availableProvider)
+    (treeItem: SkillTreeItem) => toggleFavoriteCommand(treeItem, configService, availableProvider)
   );
 
   // Clear search filter command

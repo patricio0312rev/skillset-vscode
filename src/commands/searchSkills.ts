@@ -31,8 +31,8 @@ export async function searchSkillsCommand(
     }
 
     logger.info('Search skills command executed', { filterText });
-  } catch (error: any) {
+  } catch (error) {
     logger.error('Search skills command failed', error);
-    vscode.window.showErrorMessage(`Search failed: ${error.message}`);
+    vscode.window.showErrorMessage(`Search failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

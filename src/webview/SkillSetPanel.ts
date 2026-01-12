@@ -5,6 +5,19 @@ import { FileSystemService } from '../services/FileSystemService';
 import { ConfigService } from '../services/ConfigService';
 import { logger } from '../utils/logger';
 import { TIMING } from '../utils/constants';
+import { ToolType, DomainId } from '../models/SkillConfig';
+
+/** Webview message types */
+interface WebviewMessage {
+  command: string;
+  data?: {
+    tool?: string;
+    folder?: string;
+    domains?: string[];
+    skills?: string[];
+    skillId?: string;
+  };
+}
 
 /**
  * Manages the SkillSet webview panel
@@ -15,7 +28,6 @@ export class SkillSetPanel {
   private static readonly viewType = 'skillsetPanel';
 
   private readonly _panel: vscode.WebviewPanel;
-  private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
 
   /**
@@ -77,7 +89,6 @@ export class SkillSetPanel {
     private onInstallComplete: () => void
   ) {
     this._panel = panel;
-    this._extensionUri = extensionUri;
 
     // Set panel icon to match the sidebar library icon
     this._panel.iconPath = vscode.Uri.joinPath(extensionUri, 'resources', 'library.svg');
@@ -101,7 +112,7 @@ export class SkillSetPanel {
   /**
    * Handle messages from the webview
    */
-  private async _handleMessage(message: any): Promise<void> {
+  private async _handleMessage(message: WebviewMessage): Promise<void> {
     logger.debug('Received message from webview', message);
 
     switch (message.command) {
@@ -110,7 +121,14 @@ export class SkillSetPanel {
         break;
 
       case 'install':
-        await this._handleInstall(message.data);
+        if (message.data?.tool && message.data?.folder && message.data?.domains && message.data?.skills) {
+          await this._handleInstall({
+            tool: message.data.tool,
+            folder: message.data.folder,
+            domains: message.data.domains,
+            skills: message.data.skills,
+          });
+        }
         break;
 
       case 'cancel':
@@ -122,7 +140,9 @@ export class SkillSetPanel {
         break;
 
       case 'toggleFavorite':
-        await this._handleToggleFavorite(message.data);
+        if (message.data?.skillId) {
+          await this._handleToggleFavorite({ skillId: message.data.skillId });
+        }
         break;
 
       default:
@@ -212,9 +232,9 @@ export class SkillSetPanel {
           // Generate skills
           await this.skillSetService.generateSkills(
             {
-              tool: data.tool as any,
+              tool: data.tool as ToolType,
               folder: data.folder,
-              domains: data.domains as any[],
+              domains: data.domains as DomainId[],
               skills: data.skills,
             },
             workspaceFolder.fsPath
@@ -238,22 +258,24 @@ export class SkillSetPanel {
       this.onInstallComplete();
 
       logger.info('Skills installed successfully');
-    } catch (error: any) {
+    } catch (error) {
       logger.error('Failed to install skills', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to install skills';
 
       this._panel.webview.postMessage({
         command: 'error',
-        message: error.message || 'Failed to install skills',
+        message: errorMessage,
       });
 
-      vscode.window.showErrorMessage(`Failed to install skills: ${error.message}`);
+      vscode.window.showErrorMessage(`Failed to install skills: ${errorMessage}`);
     }
   }
 
   /**
    * Show a toast notification in the webview
    */
-  private _showToast(message: string, folder?: string): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private _showToast(_message: string, _folder?: string): void {
     // Auto-dismiss toast notification
     setTimeout(() => {
       this._panel.dispose();

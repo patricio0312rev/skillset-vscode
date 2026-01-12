@@ -27,8 +27,8 @@ export async function refreshSkillsCommand(
     }, 1000);
 
     logger.info('Skill tree views refreshed successfully');
-  } catch (error: any) {
+  } catch (error) {
     logger.error('Failed to refresh skill tree views', error);
-    vscode.window.showErrorMessage(`Failed to refresh skills: ${error.message}`);
+    vscode.window.showErrorMessage(`Failed to refresh skills: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

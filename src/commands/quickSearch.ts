@@ -43,8 +43,8 @@ export async function quickSearchCommand(
     items.sort((a, b) => {
       const aFav = favoriteIds.includes(a.skillId);
       const bFav = favoriteIds.includes(b.skillId);
-      if (aFav && !bFav) return -1;
-      if (!aFav && bFav) return 1;
+      if (aFav && !bFav) { return -1; }
+      if (!aFav && bFav) { return 1; }
       return a.label.localeCompare(b.label);
     });
 
@@ -80,7 +80,7 @@ export async function quickSearchCommand(
                 domainId: item.domainId,
               });
               break;
-            case 'favorite':
+            case 'favorite': {
               await configService.toggleFavoriteSkill(item.skillId);
               const isFav = configService.isFavoriteSkill(item.skillId);
               vscode.window.showInformationMessage(
@@ -89,6 +89,7 @@ export async function quickSearchCommand(
                   : `Removed "${item.label.replace('$(star-full) ', '')}" from favorites`
               );
               break;
+            }
           }
         }
       }
@@ -98,8 +99,8 @@ export async function quickSearchCommand(
     quickPick.show();
 
     logger.info('Quick search command executed', { skillCount: skills.length });
-  } catch (error: any) {
+  } catch (error) {
     logger.error('Quick search command failed', error);
-    vscode.window.showErrorMessage(`Search failed: ${error.message}`);
+    vscode.window.showErrorMessage(`Search failed: ${error instanceof Error ? error.message : String(error)}`);
   }
 }

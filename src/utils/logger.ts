@@ -37,7 +37,7 @@ class Logger {
    * @param message Message to log
    * @param data Optional additional data to log
    */
-  public info(message: string, data?: any): void {
+  public info(message: string, data?: unknown): void {
     const timestamp = this.getTimestamp();
     this.outputChannel.appendLine(`[${timestamp}] [INFO] ${message}`);
     if (data !== undefined) {
@@ -50,7 +50,7 @@ class Logger {
    * @param message Warning message
    * @param data Optional additional data
    */
-  public warn(message: string, data?: any): void {
+  public warn(message: string, data?: unknown): void {
     const timestamp = this.getTimestamp();
     this.outputChannel.appendLine(`[${timestamp}] [WARN] ${message}`);
     if (data !== undefined) {
@@ -63,7 +63,7 @@ class Logger {
    * @param message Error message
    * @param error Optional error object
    */
-  public error(message: string, error?: any): void {
+  public error(message: string, error?: unknown): void {
     const timestamp = this.getTimestamp();
     this.outputChannel.appendLine(`[${timestamp}] [ERROR] ${message}`);
 
@@ -84,7 +84,7 @@ class Logger {
    * @param message Debug message
    * @param data Optional additional data
    */
-  public debug(message: string, data?: any): void {
+  public debug(message: string, data?: unknown): void {
     const timestamp = this.getTimestamp();
     this.outputChannel.appendLine(`[${timestamp}] [DEBUG] ${message}`);
     if (data !== undefined) {
