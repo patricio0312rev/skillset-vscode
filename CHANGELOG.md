@@ -5,7 +5,32 @@ All notable changes to the SkillSet VS Code extension will be documented in this
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.4] - 2024-12-31
+## [0.2.0] - 2025-01-11
+
+### Added
+
+- **Skill Search** - Find skills quickly across tree view and webview
+  - Search icon in tree view title bar to filter skills by name, ID, or description
+  - Command palette quick search (`SkillSet: Quick Search`) with fuzzy matching
+  - Real-time search filtering in webview skill manager
+- **Skill Favorites** - Mark your most-used skills for quick access
+  - Right-click any skill to toggle favorite status
+  - Dedicated "Favorites" section in tree view sidebar
+  - Quick-add favorites section in webview skill manager
+  - Star button on each skill in the webview for easy favoriting
+  - Favorites persist across VS Code sessions
+- **Skill Dependencies** - Understand skill relationships
+  - View prerequisites, related skills, and suggested next skills in preview
+  - Dependency information displayed in skill detail view
+  - Static dependency mapping for 40+ skills
+- Updated `@patricio0312rev/skillset` package to v0.2.1 with new skills
+
+### Changed
+
+- Skills are no longer auto-selected when selecting a domain in webview
+- Improved webview favorites section with selection indicators and remove buttons
+
+## [0.1.4] - 2025-12-31
 
 ### Fixed
 
@@ -13,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reimplemented skill generation to use bundled templates from `dist/templates/` with proper path resolution
 - Skills now correctly copy full template content including references and templates subfolders
 
-## [0.1.3] - 2024-12-31
+## [0.1.3] - 2025-12-31
 
 ### Fixed
 
@@ -27,19 +52,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated webview header icon to match the VS Code library codicon (2 vertical + 1 diagonal book)
 - Added `resources/library.svg` for consistent icon usage across the extension
 
-## [0.1.2] - 2024-12-31
+## [0.1.2] - 2025-12-31
 
 ### Fixed
 
 - Fixed extension not activating in production due to unbundled dependencies
 
-## [0.1.1] - 2024-12-31
+## [0.1.1] - 2025-12-31
 
 ### Added
 
 - Added publish scripts: `publish:vscode`, `publish:ovsx`, and `publish:all` for marketplace publishing
 
-## [0.1.0] - 2024-12-31
+## [0.1.0] - 2025-12-31
 
 ### Added
 
@@ -106,9 +131,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Planned
 
 - Skill update functionality to refresh existing skills
-- Individual skill installation from available tree view
-- Skill search and filtering
-- Skill dependency management
 - Export/import skill configurations
 - Skill templates and customization
 - Analytics and usage tracking
