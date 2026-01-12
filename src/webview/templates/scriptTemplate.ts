@@ -17,6 +17,8 @@ export const scriptTemplate = (tools: string, domains: string) => `
       // State management
       let selectedTool = 'claude-code';
       let selectedDomains = new Set();
+      let searchQuery = '';
+      let favoriteSkills = [];
       let state = {
         selectedDomains: [],
         selectedSkills: [],
@@ -66,8 +68,144 @@ export const scriptTemplate = (tools: string, domains: string) => `
         </svg>\`;
       }
 
-      // Request domains data
+      // Request domains and favorites data
       vscode.postMessage({ command: 'getDomains' });
+      vscode.postMessage({ command: 'getFavorites' });
+
+      // Search functionality
+      const searchInput = document.getElementById('searchInput');
+      const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+      searchInput.oninput = (e) => {
+        searchQuery = e.target.value.toLowerCase();
+        clearSearchBtn.style.display = searchQuery ? 'block' : 'none';
+        filterDomainsDisplay();
+      };
+
+      clearSearchBtn.onclick = () => {
+        searchInput.value = '';
+        searchQuery = '';
+        clearSearchBtn.style.display = 'none';
+        filterDomainsDisplay();
+      };
+
+      function filterDomainsDisplay() {
+        if (!searchQuery) {
+          // Show all domains
+          document.querySelectorAll('.department-card').forEach(card => {
+            card.style.display = 'block';
+          });
+        } else {
+          // Filter domains based on search
+          document.querySelectorAll('.department-card').forEach(card => {
+            const domainId = card.querySelector('.department-header').dataset.deptId;
+            const domain = DOMAINS.find(d => d.id === domainId);
+            if (!domain) return;
+
+            // Check domain name
+            const domainMatch = domain.name.toLowerCase().includes(searchQuery);
+
+            // Check skills in domain
+            const domainSkills = state.domainSkills[domainId] || [];
+            const skillMatch = domainSkills.some(skill =>
+              skill.name.toLowerCase().includes(searchQuery) ||
+              skill.id.toLowerCase().includes(searchQuery)
+            );
+
+            card.style.display = (domainMatch || skillMatch) ? 'block' : 'none';
+          });
+        }
+
+        // Re-render skills list to apply filter
+        renderAgentsList();
+      }
+
+      // Favorites functionality
+      function renderFavorites() {
+        const favoritesSection = document.getElementById('favoritesSection');
+        const favoritesGrid = document.getElementById('favoritesGrid');
+
+        if (favoriteSkills.length === 0) {
+          favoritesSection.style.display = 'none';
+          return;
+        }
+
+        favoritesSection.style.display = 'block';
+        favoritesGrid.innerHTML = '';
+
+        // Get skill details for favorites
+        favoriteSkills.forEach(skillId => {
+          // Find skill in domain skills (if available)
+          let skillDetails = null;
+          let skillDomain = null;
+
+          for (const [domainId, skills] of Object.entries(state.domainSkills)) {
+            const found = skills.find(s => s.id === skillId);
+            if (found) {
+              skillDetails = found;
+              skillDomain = domainId;
+              break;
+            }
+          }
+
+          // Use skill details if found, otherwise format the skill ID
+          const skillName = skillDetails ? skillDetails.name : formatSkillName(skillId);
+          const isSelected = state.selectedSkills.includes(skillId);
+
+          const chip = document.createElement('div');
+          chip.className = 'favorite-chip' + (isSelected ? ' selected' : '');
+          chip.dataset.skillId = skillId;
+          chip.dataset.domainId = skillDomain || '';
+          chip.innerHTML = \`
+            <span class="favorite-chip-star">&#9733;</span>
+            <span class="favorite-chip-name">\${skillName}</span>
+            \${isSelected ? '<span class="favorite-chip-check">&#10003;</span>' : ''}
+            <span class="favorite-chip-remove" title="Remove from favorites">&times;</span>
+          \`;
+
+          // Click on chip to toggle selection
+          chip.onclick = (e) => {
+            // Don't toggle if clicking remove button
+            if (e.target.classList.contains('favorite-chip-remove')) return;
+
+            const chipSkillId = chip.dataset.skillId;
+            const chipDomainId = chip.dataset.domainId;
+
+            // Toggle selection of this skill
+            if (state.selectedSkills.includes(chipSkillId)) {
+              state.selectedSkills = state.selectedSkills.filter(id => id !== chipSkillId);
+            } else {
+              state.selectedSkills.push(chipSkillId);
+              // Also select the domain if not selected and domain is known
+              if (chipDomainId && !selectedDomains.has(chipDomainId)) {
+                selectedDomains.add(chipDomainId);
+                state.selectedDomains = Array.from(selectedDomains);
+                // Update domain card
+                const domainCard = document.querySelector(\`[data-dept-id="\${chipDomainId}"]\`)?.parentElement;
+                if (domainCard) domainCard.classList.add('selected');
+              }
+            }
+            renderFavorites();
+            renderAgentsList();
+            updateSummary();
+          };
+
+          // Click on remove button to remove from favorites
+          const removeBtn = chip.querySelector('.favorite-chip-remove');
+          if (removeBtn) {
+            removeBtn.onclick = (e) => {
+              e.stopPropagation();
+              // Remove from favorites via extension
+              vscode.postMessage({
+                command: 'toggleFavorite',
+                data: { skillId: skillId }
+              });
+            };
+          }
+
+          favoritesGrid.appendChild(chip);
+        });
+      }
 
       // Render tools
       const toolGrid = document.getElementById('toolGrid');
@@ -101,7 +239,7 @@ export const scriptTemplate = (tools: string, domains: string) => `
         updateSummary();
       }
 
-      // Listen for domains data
+      // Listen for messages from extension
       window.addEventListener('message', event => {
         const message = event.data;
         if (message.command === 'domainsData') {
@@ -119,6 +257,15 @@ export const scriptTemplate = (tools: string, domains: string) => `
             });
           }
           renderDomains();
+          renderFavorites();
+        } else if (message.command === 'favoritesData') {
+          // Store favorites
+          favoriteSkills = message.data || [];
+          renderFavorites();
+          // Also re-render agents list to update star button states
+          if (selectedDomains.size > 0) {
+            renderAgentsList();
+          }
         } else if (message.command === 'installComplete') {
           // Handle install complete
         }
@@ -161,20 +308,13 @@ export const scriptTemplate = (tools: string, domains: string) => `
           selectedDomains.delete(domainId);
           card.classList.remove('selected');
 
-          // Remove all skills from this domain
+          // Remove all skills from this domain when deselecting
           const domainSkillIds = (state.domainSkills[domainId] || []).map(s => s.id);
           state.selectedSkills = state.selectedSkills.filter(id => !domainSkillIds.includes(id));
         } else {
           selectedDomains.add(domainId);
           card.classList.add('selected');
-
-          // Auto-select all skills in this domain
-          const domainSkills = state.domainSkills[domainId] || [];
-          domainSkills.forEach(skill => {
-            if (!state.selectedSkills.includes(skill.id)) {
-              state.selectedSkills.push(skill.id);
-            }
-          });
+          // Skills are NOT auto-selected - user picks individual skills
         }
 
         state.selectedDomains = Array.from(selectedDomains);
@@ -198,6 +338,19 @@ export const scriptTemplate = (tools: string, domains: string) => `
           const domain = DOMAINS.find(d => d.id === domainId);
           if (!domain) return;
 
+          // Get skills and filter by search query
+          let skills = state.domainSkills[domainId] || [];
+          if (searchQuery) {
+            skills = skills.filter(skill =>
+              skill.name.toLowerCase().includes(searchQuery) ||
+              skill.id.toLowerCase().includes(searchQuery) ||
+              (skill.description && skill.description.toLowerCase().includes(searchQuery))
+            );
+          }
+
+          // Skip domain if no skills match the filter
+          if (skills.length === 0) return;
+
           const deptSection = document.createElement('div');
           deptSection.className = 'agents-list';
 
@@ -206,13 +359,13 @@ export const scriptTemplate = (tools: string, domains: string) => `
           deptHeader.innerHTML = \`
             <div class="select-all-item">
               <input type="checkbox" class="select-all-checkbox" id="select-all-\${domainId}" data-dept="\${domainId}">
-              <span>\${domain.name} (Select All)</span>
+              <span>\${domain.name} (Select All\${searchQuery ? ' Filtered' : ''})</span>
             </div>
           \`;
           deptSection.appendChild(deptHeader);
 
-          const skills = state.domainSkills[domainId] || [];
           skills.forEach(skill => {
+            const isFavorite = favoriteSkills.includes(skill.id);
             const agentItem = document.createElement('div');
             agentItem.className = 'agent-item';
             agentItem.innerHTML = \`
@@ -221,6 +374,9 @@ export const scriptTemplate = (tools: string, domains: string) => `
                 <div class="agent-name">\${skill.name}</div>
                 <div class="agent-description">\${skill.description || ''}</div>
               </div>
+              <span class="agent-favorite-btn \${isFavorite ? 'is-favorite' : ''}" data-skill-id="\${skill.id}" title="\${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
+                \${isFavorite ? '&#9733;' : '&#9734;'}
+              </span>
             \`;
             deptSection.appendChild(agentItem);
           });
@@ -275,6 +431,33 @@ export const scriptTemplate = (tools: string, domains: string) => `
 
           // Update initial state
           updateSelectAllCheckbox(checkbox.dataset.dept);
+        });
+
+        // Make select-all labels clickable
+        document.querySelectorAll('.select-all-item').forEach(item => {
+          const label = item.querySelector('span');
+          if (label) {
+            label.style.cursor = 'pointer';
+            label.onclick = () => {
+              const checkbox = item.querySelector('.select-all-checkbox');
+              if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                checkbox.onchange();
+              }
+            };
+          }
+        });
+
+        // Add click handlers for favorite buttons
+        document.querySelectorAll('.agent-favorite-btn').forEach(btn => {
+          btn.onclick = (e) => {
+            e.stopPropagation();
+            const skillId = btn.dataset.skillId;
+            vscode.postMessage({
+              command: 'toggleFavorite',
+              data: { skillId: skillId }
+            });
+          };
         });
 
         updateSummary();
