@@ -370,5 +370,222 @@ export const styles = `
     .dept-section-icon {
       font-size: 18px;
     }
+
+    /* Search Styles */
+    .search-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 10px 16px;
+      background: var(--vscode-input-background);
+      color: var(--vscode-input-foreground);
+      border: 1px solid var(--vscode-input-border);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--vscode-focusBorder);
+    }
+
+    .search-input::placeholder {
+      color: var(--vscode-input-placeholderForeground);
+    }
+
+    .search-clear {
+      padding: 8px 16px;
+      background: var(--vscode-button-secondaryBackground);
+      color: var(--vscode-button-secondaryForeground);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .search-clear:hover {
+      background: var(--vscode-button-secondaryHoverBackground);
+    }
+
+    /* Favorites Section Styles */
+    .favorites-section {
+      background: var(--vscode-textBlockQuote-background);
+      border: 1px solid var(--vscode-panel-border);
+      border-radius: 6px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .favorites-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .favorites-icon {
+      color: var(--vscode-charts-yellow);
+      font-size: 16px;
+    }
+
+    .favorites-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--vscode-descriptionForeground);
+    }
+
+    .favorites-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .favorite-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--vscode-input-background);
+      border: 2px solid var(--vscode-input-border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+      position: relative;
+    }
+
+    .favorite-chip:hover {
+      border-color: var(--vscode-focusBorder);
+      transform: translateY(-1px);
+    }
+
+    .favorite-chip.selected {
+      background: var(--vscode-button-secondaryBackground);
+      border-color: var(--vscode-focusBorder);
+    }
+
+    .favorite-chip-star {
+      color: var(--vscode-charts-yellow);
+      font-size: 14px;
+    }
+
+    .favorite-chip-check {
+      color: var(--vscode-charts-green);
+      font-size: 14px;
+      margin-left: 4px;
+    }
+
+    .favorite-chip-name {
+      flex: 1;
+    }
+
+    .favorite-chip-remove {
+      opacity: 0.5;
+      cursor: pointer;
+      font-size: 16px;
+      margin-left: 6px;
+      padding: 0 4px;
+      border-radius: 4px;
+    }
+
+    .favorite-chip-remove:hover {
+      opacity: 1;
+      background: var(--vscode-inputValidation-errorBackground);
+      color: var(--vscode-inputValidation-errorForeground);
+    }
+
+    .favorites-empty {
+      color: var(--vscode-descriptionForeground);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    /* Skill Dependencies Styles */
+    .skill-dependencies {
+      background: var(--vscode-textBlockQuote-background);
+      border-radius: 4px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .skill-dependencies h4 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      color: var(--vscode-foreground);
+    }
+
+    .dependency-group {
+      display: flex;
+      gap: 8px;
+      margin: 4px 0;
+    }
+
+    .dep-label {
+      color: var(--vscode-descriptionForeground);
+      min-width: 110px;
+    }
+
+    .dep-skills {
+      color: var(--vscode-textLink-foreground);
+    }
+
+    .dep-skill-link {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .dep-skill-link:hover {
+      color: var(--vscode-textLink-activeForeground);
+    }
+
+    /* No Results Message */
+    .no-results {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--vscode-descriptionForeground);
+    }
+
+    .no-results-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .no-results-text {
+      font-size: 16px;
+    }
+
+    /* Agent Favorite Button */
+    .agent-favorite-btn {
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--vscode-descriptionForeground);
+      opacity: 0.5;
+      transition: all 0.2s;
+      padding: 4px;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    .agent-favorite-btn:hover {
+      opacity: 1;
+      color: var(--vscode-charts-yellow);
+      transform: scale(1.1);
+    }
+
+    .agent-favorite-btn.is-favorite {
+      opacity: 1;
+      color: var(--vscode-charts-yellow);
+    }
+
+    .agent-favorite-btn.is-favorite:hover {
+      opacity: 0.7;
+    }
   </style>
 `;
